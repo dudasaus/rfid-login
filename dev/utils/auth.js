@@ -1,0 +1,4 @@
+export default {
+  device: '4c0025000751353530373132',
+  token: '186c77bff04ae2a7838554e7957e0bb7068a9408'
+}

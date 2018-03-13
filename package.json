@@ -1,0 +1,42 @@
+{
+  "name": "rfid-login",
+  "version": "1.0.0",
+  "description": "RFID Login",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack -p",
+    "dev": "./node_modules/.bin/webpack -d --watch",
+    "start": "node index.js",
+    "scss": "sass --sourcemap=none --watch ./dev/scss/style.scss:./public/css/style.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rfid, particle, photon, login, umich, entr 390"
+  ],
+  "author": "Austin Dudas",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dudasaus/rfid-login.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dudasaus/rfid-login/issues"
+  },
+  "homepage": "https://github.com/dudasaus/rfid-login#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "particle-api-js": "^7.1.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.11"
+  }
+}
