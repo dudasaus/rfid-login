@@ -15,5 +15,15 @@ module.exports = {
     else {
       res.json({ success: false });
     }
+  },
+  verifyRfid(req, res) {
+    const email = req.body.email;
+    const rfid = req.body.rfid;
+    if (accounts[email] && accounts[email]['rfid'] === rfid) {
+      res.json({ success: true });
+    }
+    else {
+      res.json({ success: false });
+    }
   }
 }
