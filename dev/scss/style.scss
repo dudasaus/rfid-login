@@ -1,0 +1,104 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700");
+@import url("https://fonts.googleapis.com/css?family=Inconsolata:400,700");
+
+$blue: #42A5F5;
+$white: #fff;
+$gray: #B0BEC5;
+$dark-gray: #546E7A;
+$shadow: rgba(#000, 0.3);
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin :0;
+  font-family: 'Open Sans', sans-serif;
+  padding-bottom: 3rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+  color: $dark-gray;
+  font-family: 'Inconsolata', monospace;
+}
+
+header {
+  background: $blue;
+  text-align: center;
+  padding: 1rem;
+  color: $white;
+  box-shadow: 0px 2px 2px $shadow;
+  h1 {
+    margin: 0;
+    color: inherit;
+  }
+}
+
+footer {
+  text-align: center;
+  width: 100%;
+  color: $dark-gray;
+  font-size: 0.75rem;
+  height: 3rem;
+  position: absolute;
+  bottom: 0;
+}
+
+.main {
+  margin: 1rem 6rem;
+}
+
+input[type="text"], input[type="password"] {
+  border: none;
+  border-bottom: 1px solid $gray;
+  margin-bottom: 2rem;
+  background: transparent;
+  &:hover {
+    border-bottom-color: $blue;
+  }
+  &:focus {
+    outline: none;
+    border-bottom: 3px solid $blue;
+    margin-bottom: calc(2rem - 2px);
+  }
+}
+
+button, .btn {
+  background: transparent;
+  border: 1px solid $blue;
+  color: $blue;
+  padding: 0.6rem 1.5rem;
+  font-family: inherit;
+  transition: background 0.2s, color 0.2s;
+  &:hover {
+    background: $blue;
+    color: $white;
+  }
+  &:focus {
+    outline: 2px dashed $blue;
+  }
+}
+
+form.login {
+  display: flex;
+  flex-direction: column;
+  max-width: 420px;
+  margin: auto;
+  align-items: center;
+}
+
+.input-group {
+  * {
+    display: block;
+  }
+  label {
+    font-size: 0.75rem;
+    color: $dark-gray;
+    margin-bottom: 0.5em;
+  }
+  input {
+    width: 20em;
+    font-size: 1rem;
+  }
+}
