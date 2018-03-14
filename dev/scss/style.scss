@@ -80,12 +80,16 @@ button, .btn {
   }
 }
 
-form.login {
+.center-stack {
   display: flex;
   flex-direction: column;
   max-width: 420px;
   margin: auto;
   align-items: center;
+}
+
+form.login {
+  @extend .center-stack;
 }
 
 .input-group {

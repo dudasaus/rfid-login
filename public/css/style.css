@@ -60,7 +60,7 @@ button, .btn {
   button:focus, .btn:focus {
     outline: 2px dashed #42A5F5; }
 
-form.login {
+.center-stack, form.login {
   display: flex;
   flex-direction: column;
   max-width: 420px;

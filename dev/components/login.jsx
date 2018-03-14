@@ -129,7 +129,7 @@ class Login extends React.Component {
       <form className="login" onSubmit={this.handleSubmit}>
         <h2>Login</h2>
         <div className="input-group">
-          <label for="email">Email</label>
+          <label htmlFor="email">Email</label>
           <input
             type="text"
             name="email"
@@ -139,7 +139,7 @@ class Login extends React.Component {
           />
         </div>
         <div className="input-group">
-          <label for="password">Password</label>
+          <label htmlFor="password">Password</label>
           <input
             type="password"
             name="password"
@@ -156,7 +156,11 @@ class Login extends React.Component {
   // Render scanning message
   renderScan() {
     return (
-      <p>Please scan your RFID card or keychain to verify your identity.</p>
+      <div className="center-stack">
+        <h2>Two Factor Authentication</h2>
+        <p>Please scan your RFID card or keychain to verify your identity.</p>
+        <button onClick={this.logout}>Cancel</button>
+      </div>
     );
   }
 
