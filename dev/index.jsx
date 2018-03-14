@@ -6,7 +6,9 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>RFID 2FA</h1>
+        <header>
+          <h1>RFID 2FA Login System</h1>
+        </header>
         <Login/>
       </div>
     );

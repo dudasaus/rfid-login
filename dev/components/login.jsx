@@ -195,8 +195,12 @@ class Login extends React.Component {
   render() {
     return (
       <div>
-        { this.renderPart() }
-        { this.renderConnectionMessage() }
+        <div className="main">
+          { this.renderPart() }
+        </div>
+        <footer>
+          { this.renderConnectionMessage() }
+        </footer>
       </div>
     );
   }
