@@ -13,6 +13,9 @@ h1, h2, h3, h4, h5, h6 {
   color: #546E7A;
   font-family: 'Inconsolata', monospace; }
 
+p {
+  color: #546E7A; }
+
 header {
   background: #42A5F5;
   text-align: center;
@@ -66,6 +69,8 @@ button, .btn {
   max-width: 420px;
   margin: auto;
   align-items: center; }
+  .center-stack p, form.login p {
+    text-align: center; }
 
 .input-group * {
   display: block; }
@@ -76,3 +81,7 @@ button, .btn {
 .input-group input {
   width: 20em;
   font-size: 1rem; }
+
+#rfid-img {
+  margin-top: 1rem;
+  margin-bottom: 3rem; }

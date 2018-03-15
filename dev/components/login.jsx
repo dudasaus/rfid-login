@@ -158,7 +158,8 @@ class Login extends React.Component {
     return (
       <div className="center-stack">
         <h2>Two Factor Authentication</h2>
-        <p>Please scan your RFID card or keychain to verify your identity.</p>
+        <img id="rfid-img" src="/assets/rfid-card.svg" alt="card scanner" width="420"/>
+        <p>Please scan your RFID card or keychain to verify your&nbsp;identity.</p>
         <button onClick={this.logout}>Cancel</button>
       </div>
     );
