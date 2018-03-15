@@ -19,8 +19,5 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
-  },
-  ignore: [
-    'node_modules/'
-  ]
+  }
 };

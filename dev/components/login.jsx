@@ -1,6 +1,7 @@
 import React from 'react';
 import Particle from 'particle-api-js';
 import AUTH from '../utils/auth.js';
+import ErrorMessage from './error-message.jsx';
 
 const TEXT = 0, SCAN = 1, SCANNING = 2, LOGGED_IN = 3;
 const FAILED = -1, PENDING = 0, CONNECTED = 1;
@@ -16,7 +17,8 @@ class Login extends React.Component {
       email: '',
       password: '',
       scannerStatus: PENDING,
-      disabled: false
+      disabled: false,
+      errorMessage: null,
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -24,6 +26,7 @@ class Login extends React.Component {
     this.handleScan = this.handleScan.bind(this);
     this.clearForm = this.clearForm.bind(this);
     this.logout = this.logout.bind(this);
+    this.error = this.error.bind(this);
   }
 
   componentDidMount() {
@@ -59,9 +62,7 @@ class Login extends React.Component {
         this.setState({ phase: LOGGED_IN });
       }
       else {
-        alert('Incorrect RFID');
-        this.clearForm();
-        this.setState({ phase: TEXT });
+        this.error('RFID did not match');
       }
     }).catch((err) => {
       console.error(err);
@@ -93,11 +94,11 @@ class Login extends React.Component {
       if (res.success) {
         this.setState({
           phase: SCAN,
+          errorMessage: null,
         });
       }
       else {
-        alert('Incorrect login');
-        this.clearForm();
+        this.error('Incorrect login');
       }
       this.setState({ disabled: false });
     }).catch((err) => {
@@ -121,6 +122,27 @@ class Login extends React.Component {
       email: '',
       password: ''
     });
+  }
+
+  // Error
+  error(errorMessage) {
+    this.setState({
+      errorMessage,
+      phase: TEXT,
+      email: '',
+      password: '',
+      disabled: false,
+    });
+  }
+
+  // Render error message
+  renderError() {
+    if (this.state.errorMessage) {
+      return <ErrorMessage message={this.state.errorMessage} />;
+    }
+    else {
+      return null;
+    }
   }
 
   // Render login form
@@ -148,6 +170,7 @@ class Login extends React.Component {
             onChange={this.handleChange}
           />
         </div>
+        { this.renderError() }
         <button>Login</button>
       </form>
     );
@@ -169,11 +192,11 @@ class Login extends React.Component {
   renderHome() {
     return (
       <div>
-        <p>Successfully logged in.</p>
-        <h2>Welcome!</h2>
+        <h2>Home</h2>
+        <p>You have successfully logged in to the RFID 2FA login system.</p>
         <button onClick={this.logout}>Log out</button>
       </div>
-    )
+    );
   }
 
   renderPart() {
@@ -218,4 +241,4 @@ class Login extends React.Component {
   }
 }
 
-module.exports = Login;
+export default Login;
