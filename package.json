@@ -8,6 +8,7 @@
     "dev": "./node_modules/.bin/webpack -d --watch",
     "start": "node index.js",
     "scss": "sass --sourcemap=none --watch ./dev/scss/style.scss:./public/css/style.css",
+    "db-reset": "rm database/*.sqlite3",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -29,7 +30,8 @@
     "multer": "^1.3.0",
     "particle-api-js": "^7.1.1",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "sqlite3": "^4.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -1,9 +1,13 @@
+const Database = require('../database/db');
+
 const accounts = {
   'dudasaus@umich.edu': {
     password: 'password',
     rfid: 'f4554076'
   }
 }
+
+const db = new Database;
 
 module.exports = {
   login(req, res) {
