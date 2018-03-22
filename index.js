@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.use(upload.array());
 
 // API endpoints
+app.post('/api/create/', accountApi.create);
 app.post('/api/login/', accountApi.login);
 app.post('/api/verify-rfid/', accountApi.verifyRfid);
 

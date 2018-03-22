@@ -17,7 +17,8 @@ class Database {
 
   // If the DB doesn't exist, make it
   init() {
-    const dbExists = fs.existsSync(this.name);
+    const dbPath = path.join(DIR, this.name);
+    const dbExists = fs.existsSync(dbPath);
     if (!dbExists) {
       const schema = path.join(DIR, 'sql', 'schema.sql');
       const schemaSQL = fs.readFileSync(schema, 'utf8');
