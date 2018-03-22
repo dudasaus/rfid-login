@@ -95,14 +95,12 @@ module.exports = {
         }
         else {
           // Passwords did not match
-          console.log('No match');
           res.json({ success: false });
         }
         curr.close();
       }
       else {
         // Row wasn't found or DB error
-        console.log('Row not found');
         res.json({ success: false });
       }
     });
@@ -111,11 +109,41 @@ module.exports = {
   verifyRfid(req, res) {
     const email = req.body.email;
     const rfid = req.body.rfid;
-    if (accounts[email] && accounts[email]['rfid'] === rfid) {
-      res.json({ success: true });
-    }
-    else {
+
+    // Make sure we have values
+    if (!email || !rfid) {
       res.json({ success: false });
+      return;
     }
+
+    // Open database
+    let curr = null;
+    try {
+      curr = db.open();
+    }
+    catch (e) {
+      res.json({ success: false });
+      return;
+    }
+
+    // Verify RFID
+    const sql = 'SELECT email FROM accounts WHERE email=? AND rfid=?';
+    const vals = [email, rfid];
+    curr.get(sql, vals, (err, row) => {
+      if (!err && row !== undefined) {
+        // Success
+        res.json({
+          success: true,
+          email: row.email
+        });
+      }
+      else {
+        // Not found
+        res.json({
+          success: false
+        });
+      }
+      curr.close();
+    });
   }
 }
