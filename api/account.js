@@ -57,13 +57,57 @@ module.exports = {
   login(req, res) {
     const email = req.body.email;
     const password = req.body.password;
-    if (accounts[email] && accounts[email]['password'] === password) {
-      res.json({ success: true });
-    }
-    else {
+
+    // Make sure we have values
+    if (!email || !password) {
       res.json({ success: false });
+      return;
     }
+
+    // Open database
+    let curr = null;
+    try {
+      curr = db.open();
+    }
+    catch (e) {
+      res.json({ success: false });
+      return;
+    }
+
+    // Verify login
+    const sql = 'SELECT email, password, salt FROM accounts WHERE email=?';
+    const vals = [email];
+    curr.get(sql, vals, (err, row) => {
+      if (!err && row !== undefined) {
+        const toHash = password + row.salt;
+
+        // Hash the password
+        const hash = crypto.createHash('sha256');
+        hash.update(toHash);
+        const hashedPassword = hash.digest('hex');
+
+        if (hashedPassword === row.password) {
+          // Passwords match
+          res.json({
+            success: true,
+            email: row.email
+          });
+        }
+        else {
+          // Passwords did not match
+          console.log('No match');
+          res.json({ success: false });
+        }
+        curr.close();
+      }
+      else {
+        // Row wasn't found or DB error
+        console.log('Row not found');
+        res.json({ success: false });
+      }
+    });
   },
+
   verifyRfid(req, res) {
     const email = req.body.email;
     const rfid = req.body.rfid;
