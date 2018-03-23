@@ -15,6 +15,7 @@ app.use(upload.array());
 app.post('/api/create/', accountApi.create);
 app.post('/api/login/', accountApi.login);
 app.post('/api/verify-rfid/', accountApi.verifyRfid);
+app.get('/api/list/', accountApi.list);
 
 // Public endpoints
 app.use(express.static('public'));

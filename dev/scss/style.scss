@@ -6,6 +6,8 @@ $white: #fff;
 $gray: #B0BEC5;
 $red: #f57;
 $dark-gray: #546E7A;
+$light-green: #b8ffb8;
+$light-red: #ffb8cf;
 $shadow: rgba(#000, 0.3);
 
 * {
@@ -24,7 +26,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Inconsolata', monospace;
 }
 
-p {
+p, ul {
   color: $dark-gray;
 }
 
@@ -130,14 +132,25 @@ form.login {
   margin-bottom: 3rem;
 }
 
+#rfid-input {
+  background: $light-green;
+  color: green;
+  &[value=""] {
+    background: $light-red;
+  }
+  &::placeholder {
+    color: darken(red, 20%);
+  }
+}
+
 #form-toggle {
   background: transparent;
   color: $dark-gray;
   border: none;
-  padding: 0;
-  margin: 1em;
+  padding: 0.2rem;
+  margin: 0.8rem;
   &:focus {
-    outline: none;
+    outline: 1px dashed $dark-gray;
   }
   &:hover {
     text-decoration: underline;

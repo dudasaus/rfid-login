@@ -2,6 +2,7 @@ import React from 'react';
 import Particle from 'particle-api-js';
 import AUTH from '../utils/auth.js';
 import ErrorMessage from './error-message.jsx';
+import EmailList from './email-list.jsx';
 
 const TEXT = 0, SCAN = 1, SCANNING = 2, LOGGED_IN = 3;
 const FAILED = -1, PENDING = 0, CONNECTED = 1;
@@ -52,6 +53,10 @@ class Login extends React.Component {
 
   // Handle particle scan event
   handleScan(e) {
+    if (e.name === 'rfid-scan' && this.state.phase === TEXT && this.state.formMode === FORM_CREATE_ACCOUNT) {
+      this.setState({ rfid: e.data });
+      return;
+    }
     if (e.name !== 'rfid-scan' || !e.data || this.state.phase !== SCAN) return;
     let data = new FormData;
     data.append('email', this.state.email);
@@ -132,7 +137,34 @@ class Login extends React.Component {
         this.error('No RFID was scanned', false);
         return;
       }
-      console.log('Submit');
+
+      let data = new FormData;
+      data.append('email', this.state.email);
+      data.append('password', this.state.password);
+      data.append('rfid', this.state.rfid);
+      fetch('/api/create/', {
+        method: 'POST',
+        body: data
+      }).then((res) => {
+        return res.json()
+      }).then((res) => {
+        if (res.success) {
+          this.setState({
+            phase: LOGGED_IN,
+            errorMessage: null,
+          });
+        }
+        else {
+          let error = 'Unable to create account';
+          if (res.message) error = res.message;
+          this.error(error);
+          this.clearForm();
+        }
+        this.setState({ disabled: false });
+      }).catch((err) => {
+        console.error(err);
+        this.setState({ disabled: false });
+      });
     }
   }
 
@@ -222,7 +254,7 @@ class Login extends React.Component {
           />
         </div>
         { this.renderError() }
-        <button>Login</button>
+        <button key="login-button">Login</button>
         <button id="form-toggle" onClick={this.toggleFormMode}>Don't have an account?</button>
       </form>
     );
@@ -263,8 +295,19 @@ class Login extends React.Component {
             onChange={this.handleChange}
           />
         </div>
+        <div className="input-group">
+          <label htmlFor="rfid-input">RFID</label>
+          <input
+            type="text"
+            name="rfid-input"
+            id="rfid-input"
+            value={this.state.rfid ? '########' : '' }
+            placeholder="Scan an RFID card for this account"
+            disabled
+          />
+        </div>
         { this.renderError() }
-        <button>Create</button>
+        <button key="create-account-button">Create</button>
         <button id="form-toggle" onClick={this.toggleFormMode}>Already have an account?</button>
       </form>
     );
@@ -299,6 +342,9 @@ class Login extends React.Component {
         <h2>Home</h2>
         <p>You have successfully logged in to the RFID 2FA login system.</p>
         <button onClick={this.logout}>Log out</button>
+        <h2>Current Account</h2>
+        <p>{this.state.email}</p>
+        <EmailList />
       </div>
     );
   }

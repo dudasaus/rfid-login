@@ -13,7 +13,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #546E7A;
   font-family: 'Inconsolata', monospace; }
 
-p {
+p, ul {
   color: #546E7A; }
 
 header {
@@ -95,13 +95,21 @@ button, .btn {
   margin-top: 1rem;
   margin-bottom: 3rem; }
 
+#rfid-input {
+  background: #b8ffb8;
+  color: green; }
+  #rfid-input[value=""] {
+    background: #ffb8cf; }
+  #rfid-input::placeholder {
+    color: #990000; }
+
 #form-toggle {
   background: transparent;
   color: #546E7A;
   border: none;
-  padding: 0;
-  margin: 1em; }
+  padding: 0.2rem;
+  margin: 0.8rem; }
   #form-toggle:focus {
-    outline: none; }
+    outline: 1px dashed #546E7A; }
   #form-toggle:hover {
     text-decoration: underline; }

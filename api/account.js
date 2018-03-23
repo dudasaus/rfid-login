@@ -18,7 +18,7 @@ module.exports = {
 
     // Make sure we have values
     if (!email || !password || !rfid) {
-      res.json({ success: false });
+      res.json({ success: false, message: 'Missing values' });
       return;
     }
 
@@ -36,7 +36,7 @@ module.exports = {
       curr = db.open();
     }
     catch (e) {
-      res.json({ success: false });
+      res.json({ success: false, message: 'Unable to open database' });
       return;
     }
 
@@ -48,7 +48,7 @@ module.exports = {
         res.json({ success: true });
       }
       else {
-        res.json({ success: false });
+        res.json({ success: false, message: 'Email or RFID already used' });
       }
       curr.close();
     });
@@ -142,6 +142,34 @@ module.exports = {
         res.json({
           success: false
         });
+      }
+      curr.close();
+    });
+  },
+
+  list(req, res) {
+    // Open database
+    let curr = null;
+    try {
+      curr = db.open();
+    }
+    catch (e) {
+      res.json({ success: false });
+      return;
+    }
+
+    // Gather emails
+    const sql = 'SELECT email FROM accounts';
+    curr.all(sql, (err, rows) => {
+      if (err) {
+        res.json({ success: false });
+      }
+      else {
+        let emails = [];
+        for (let r of rows) {
+          emails.push(r.email);
+        }
+        res.json({ success: true, emails });
       }
       curr.close();
     });
