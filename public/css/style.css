@@ -94,3 +94,14 @@ button, .btn {
 #rfid-img {
   margin-top: 1rem;
   margin-bottom: 3rem; }
+
+#form-toggle {
+  background: transparent;
+  color: #546E7A;
+  border: none;
+  padding: 0;
+  margin: 1em; }
+  #form-toggle:focus {
+    outline: none; }
+  #form-toggle:hover {
+    text-decoration: underline; }

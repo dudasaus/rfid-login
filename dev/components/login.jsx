@@ -5,6 +5,7 @@ import ErrorMessage from './error-message.jsx';
 
 const TEXT = 0, SCAN = 1, SCANNING = 2, LOGGED_IN = 3;
 const FAILED = -1, PENDING = 0, CONNECTED = 1;
+const FORM_LOGIN = 0, FORM_CREATE_ACCOUNT = 1;
 
 class Login extends React.Component {
   constructor() {
@@ -16,9 +17,12 @@ class Login extends React.Component {
       phase: TEXT,
       email: '',
       password: '',
+      retypePassword: '',
+      rfid: '',
       scannerStatus: PENDING,
       disabled: false,
       errorMessage: null,
+      formMode: FORM_LOGIN,
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -27,6 +31,7 @@ class Login extends React.Component {
     this.clearForm = this.clearForm.bind(this);
     this.logout = this.logout.bind(this);
     this.error = this.error.bind(this);
+    this.toggleFormMode = this.toggleFormMode.bind(this);
   }
 
   componentDidMount() {
@@ -81,30 +86,54 @@ class Login extends React.Component {
   // Handle form submission
   handleSubmit(e) {
     e.preventDefault();
-    this.setState({disbaled: true});
-    let data = new FormData;
-    data.append('email', this.state.email);
-    data.append('password', this.state.password);
-    fetch('/api/login/', {
-      method: 'POST',
-      body: data
-    }).then((res) => {
-      return res.json()
-    }).then((res) => {
-      if (res.success) {
+    if (this.state.formMode === FORM_LOGIN) {
+      this.setState({disbaled: true});
+      let data = new FormData;
+      data.append('email', this.state.email);
+      data.append('password', this.state.password);
+      fetch('/api/login/', {
+        method: 'POST',
+        body: data
+      }).then((res) => {
+        return res.json()
+      }).then((res) => {
+        if (res.success) {
+          this.setState({
+            phase: SCAN,
+            errorMessage: null,
+          });
+        }
+        else {
+          this.error('Incorrect login');
+        }
+        this.setState({ disabled: false });
+      }).catch((err) => {
+        console.error(err);
+        this.setState({ disabled: false });
+      });
+    }
+    else {
+      // Check for fields
+      if (!this.state.email || !this.state.password || !this.state.retypePassword) {
+        this.error('Please fill out all fields', false);
+        return;
+      }
+      // Check for matching passwords
+      if (this.state.password !== this.state.retypePassword) {
+        this.error('Passwords don\'t match', false);
         this.setState({
-          phase: SCAN,
-          errorMessage: null,
+          password: '',
+          retypePassword: '',
         });
+        return;
       }
-      else {
-        this.error('Incorrect login');
+      // Make sure RFID was scanned
+      if (!this.state.rfid) {
+        this.error('No RFID was scanned', false);
+        return;
       }
-      this.setState({ disabled: false });
-    }).catch((err) => {
-      console.error(err);
-      this.setState({ disabled: false });
-    })
+      console.log('Submit');
+    }
   }
 
   // Log out
@@ -112,7 +141,10 @@ class Login extends React.Component {
     this.setState({
       email: '',
       password: '',
+      retypePassword: '',
+      rfid: '',
       phase: TEXT,
+      formMode: FORM_LOGIN,
     })
   }
 
@@ -120,19 +152,38 @@ class Login extends React.Component {
   clearForm() {
     this.setState({
       email: '',
-      password: ''
+      password: '',
+      retypePassword: '',
+      rfid: '',
     });
   }
 
   // Error
-  error(errorMessage) {
-    this.setState({
-      errorMessage,
-      phase: TEXT,
-      email: '',
-      password: '',
-      disabled: false,
-    });
+  error(errorMessage, reset=true) {
+    if (reset) {
+      this.setState({
+        errorMessage,
+        phase: TEXT,
+        email: '',
+        password: '',
+        disabled: false,
+      });
+    }
+    else {
+      this.setState({
+        errorMessage,
+        phase: TEXT,
+        disabled: false,
+      });
+    }
+  }
+
+  // Toggle the form mode
+  toggleFormMode(e) {
+    e.preventDefault();
+    let formMode = (this.state.formMode === FORM_LOGIN) ? FORM_CREATE_ACCOUNT : FORM_LOGIN;
+    this.clearForm();
+    this.setState({ formMode, errorMessage: null });
   }
 
   // Render error message
@@ -146,7 +197,7 @@ class Login extends React.Component {
   }
 
   // Render login form
-  renderForm() {
+  renderLoginForm() {
     return (
       <form className="login" onSubmit={this.handleSubmit}>
         <h2>Login</h2>
@@ -172,8 +223,61 @@ class Login extends React.Component {
         </div>
         { this.renderError() }
         <button>Login</button>
+        <button id="form-toggle" onClick={this.toggleFormMode}>Don't have an account?</button>
       </form>
     );
+  }
+
+  // Render create form
+  renderCreateForm() {
+    return (
+      <form className="login" onSubmit={this.handleSubmit}>
+        <h2>Create Account</h2>
+        <div className="input-group">
+          <label htmlFor="email">Email</label>
+          <input
+            type="text"
+            name="email"
+            id="email"
+            value={this.state.email}
+            onChange={this.handleChange}
+          />
+        </div>
+        <div className="input-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value={this.state.password}
+            onChange={this.handleChange}
+          />
+        </div>
+        <div className="input-group">
+          <label htmlFor="password-retype">Retype password</label>
+          <input
+            type="password"
+            name="retypePassword"
+            id="retype-password"
+            value={this.state.retypePassword}
+            onChange={this.handleChange}
+          />
+        </div>
+        { this.renderError() }
+        <button>Create</button>
+        <button id="form-toggle" onClick={this.toggleFormMode}>Already have an account?</button>
+      </form>
+    );
+  }
+
+  // Render form
+  renderForm() {
+    if (this.state.formMode === FORM_LOGIN) {
+      return this.renderLoginForm();
+    }
+    else {
+      return this.renderCreateForm();
+    }
   }
 
   // Render scanning message

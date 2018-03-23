@@ -129,3 +129,17 @@ form.login {
   margin-top: 1rem;
   margin-bottom: 3rem;
 }
+
+#form-toggle {
+  background: transparent;
+  color: $dark-gray;
+  border: none;
+  padding: 0;
+  margin: 1em;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    text-decoration: underline;
+  }
+}
