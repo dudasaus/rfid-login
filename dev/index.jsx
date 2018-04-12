@@ -7,6 +7,7 @@ class App extends React.Component {
     return (
       <div>
         <header>
+          <img id="logo" src="/assets/logo.svg" alt="logo" />
           <h1>RFID 2FA Login System</h1>
         </header>
         <Login/>
